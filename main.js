@@ -99,7 +99,33 @@ function changeColor(pageX, pageY) {
 }
 
 // Mouse events
-window.addEventListener("mousedown", () => (interactionDown = true));
+// Define the audio element
+const backgroundMusic = new Audio("./stardewValleyOverture.mp3");
+backgroundMusic.loop = true; // Enable looping
+backgroundMusic.volume = 0.5; // Set volume to 50%
+
+let audioStarted = false; // Flag to track if audio has started
+
+window.addEventListener("mousedown", () => {
+  interactionDown = true;
+
+  if (!audioStarted) {
+    const playPromise = backgroundMusic.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then((_) => {
+          audioStarted = true; // Set the flag to true
+        })
+        .catch((error) => {
+          console.error(
+            "Playback prevented. Consider adding a play button.",
+            error
+          );
+        });
+    }
+  }
+});
 window.addEventListener("mouseup", () => (interactionDown = false));
 window.addEventListener("mousemove", (e) => {
   if (interactionDown) {
@@ -107,8 +133,32 @@ window.addEventListener("mousemove", (e) => {
   }
 });
 
-// Touch events
-window.addEventListener("touchstart", () => (interactionDown = true));
+window.addEventListener(
+  "touchstart",
+  () => {
+    interactionDown = true;
+
+    if (!audioStarted) {
+      const playPromise = backgroundMusic.play();
+
+      if (playPromise !== undefined) {
+        playPromise
+          .then((_) => {
+            audioStarted = true; // Set the flag to true
+          })
+          .catch((error) => {
+            console.error(
+              "Playback prevented. Consider adding a play button.",
+              error
+            );
+          });
+      }
+    }
+  },
+  { passive: false }
+); // Use passive: false to ensure the touch event doesn't get blocked
+
+// Existing touchend and touchmove event listeners
 window.addEventListener("touchend", () => (interactionDown = false));
 window.addEventListener(
   "touchmove",
@@ -120,4 +170,4 @@ window.addEventListener(
     }
   },
   { passive: false }
-); // Use passive: false to allow preventDefault
+);
