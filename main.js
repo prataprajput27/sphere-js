@@ -80,23 +80,44 @@ tl.fromTo("nav", { opacity: 0 }, { opacity: 1 });
 tl.fromTo(".title", { opacity: 0 }, { opacity: 1 });
 
 // Mouse Animation Color
-let mouseDown = false;
+let interactionDown = false;
 let rgb = [];
-window.addEventListener("mousedown", () => (mouseDown = true));
-window.addEventListener("mouseup", () => (mouseDown = false));
 
+// Common function to change color
+function changeColor(pageX, pageY) {
+  rgb = [
+    Math.round((pageX / window.innerWidth) * 255),
+    Math.round((pageY / window.innerHeight) * 255),
+    150,
+  ];
+  let newColor = new THREE.Color(`rgb(${rgb.join(",")})`);
+  gsap.to(mesh.material.color, {
+    r: newColor.r,
+    g: newColor.g,
+    b: newColor.b,
+  });
+}
+
+// Mouse events
+window.addEventListener("mousedown", () => (interactionDown = true));
+window.addEventListener("mouseup", () => (interactionDown = false));
 window.addEventListener("mousemove", (e) => {
-  if (mouseDown) {
-    rgb = [
-      Math.round((e.pageX / sizes.width) * 255),
-      Math.round((e.pageY / sizes.height) * 255),
-      150,
-    ];
-    let newColor = new THREE.Color(`rgb(${rgb.join(",")})`);
-    gsap.to(mesh.material.color, {
-      r: newColor.r,
-      g: newColor.g,
-      b: newColor.b,
-    });
+  if (interactionDown) {
+    changeColor(e.pageX, e.pageY);
   }
 });
+
+// Touch events
+window.addEventListener("touchstart", () => (interactionDown = true));
+window.addEventListener("touchend", () => (interactionDown = false));
+window.addEventListener(
+  "touchmove",
+  (e) => {
+    if (interactionDown) {
+      // Prevent the window from scrolling
+      e.preventDefault();
+      changeColor(e.touches[0].pageX, e.touches[0].pageY);
+    }
+  },
+  { passive: false }
+); // Use passive: false to allow preventDefault
