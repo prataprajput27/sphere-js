@@ -38,6 +38,28 @@
       </ul>
     </nav>
     <h1 class="title">Give it a spin</h1>
+    <button style="color: aqua; background-color: aliceblue; cursor: pointer;" id="playAudio">Play Audio</button>
+    <script>
+      document
+        .getElementById("playAudio")
+        .addEventListener("click", function () {
+          if (!audioStarted) {
+            const playPromise = backgroundMusic.play();
+
+            if (playPromise !== undefined) {
+              playPromise
+                .then(() => {
+                  audioStarted = true;
+                  // Hide the play button after successful play
+                  document.getElementById("playAudio").style.display = "none";
+                })
+                .catch((error) => {
+                  console.error("Error playing audio:", error);
+                });
+            }
+          }
+        });
+    </script>
     <script type="module" src="/main.js"></script>
   </body>
 </html>
