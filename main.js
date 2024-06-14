@@ -100,7 +100,7 @@ function changeColor(pageX, pageY) {
 
 // Mouse events
 // Define the audio element
-const backgroundMusic = new Audio("./assets/stardewValleyOverture.mp3");
+const backgroundMusic = new Audio("./public/assets/stardewValleyOverture.mp3");
 backgroundMusic.loop = true; // Enable looping
 backgroundMusic.volume = 0.5; // Set volume to 50%
 
