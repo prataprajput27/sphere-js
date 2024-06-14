@@ -39,6 +39,7 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.render(scene, camera);
+renderer.setPixelRatio(2);
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
